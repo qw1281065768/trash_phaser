@@ -1,0 +1,200 @@
+{
+    "id": "e1055197-2383-443b-9b28-08fff2f7c0f9",
+    "sceneType": "SCENE",
+    "settings": {
+        "exportClass": true,
+        "autoImport": true,
+        "importFileExtension": true,
+        "preloadPackFiles": [],
+        "createMethodName": "editorCreate",
+        "sceneKey": "Trash",
+        "borderWidth": 1280,
+        "borderHeight": 720
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "abb9a873-3ff6-4bdd-bc7e-c1a547e9d41c",
+            "label": "container_1",
+            "x": 172.66508796466837,
+            "y": 177.97785990204278,
+            "list": [
+                {
+                    "type": "Image",
+                    "id": "1e353d8d-9a04-4cc5-a369-d6ccbfa5dac8",
+                    "label": "text_1",
+                    "texture": {
+                        "key": "12-目的地01"
+                    },
+                    "x": 94.33491203533163,
+                    "y": 64.02214009795722,
+                    "scaleX": 0.4187951476448417,
+                    "scaleY": 0.5006071637780266
+                },
+                {
+                    "type": "Image",
+                    "id": "6778fa17-8fc7-4aa9-9bab-a85648550285",
+                    "label": "text_2",
+                    "x": 94.33491203533163,
+                    "y": 320.0221400979572,
+                    "scaleX": 6,
+                    "scaleY": 4
+                },
+                {
+                    "type": "Image",
+                    "id": "d37ed15f-9be7-4ed9-8525-904bb821a545",
+                    "label": "text_3",
+                    "x": 286.3349120353316,
+                    "y": 192.02214009795722,
+                    "scaleX": 6,
+                    "scaleY": 4
+                },
+                {
+                    "type": "Image",
+                    "id": "db81b7b4-b5af-4934-8e1e-bee07ad29edd",
+                    "label": "text_4",
+                    "x": 286.3349120353316,
+                    "y": 320.0221400979572,
+                    "scaleX": 6,
+                    "scaleY": 4
+                },
+                {
+                    "type": "Image",
+                    "id": "49ca8add-68de-4004-9a05-dad8d2a1b882",
+                    "label": "text_5",
+                    "x": 286.3349120353316,
+                    "y": 64.02214009795722,
+                    "scaleX": 6,
+                    "scaleY": 4
+                },
+                {
+                    "type": "Image",
+                    "id": "e477c1ef-9f81-4d8d-aaf6-093529ac071e",
+                    "label": "text_6",
+                    "x": 94.33491203533163,
+                    "y": 192.02214009795722,
+                    "scaleX": 6,
+                    "scaleY": 4
+                },
+                {
+                    "type": "Image",
+                    "id": "58b0ae7d-175a-439e-9379-a2a1ac8528ce",
+                    "label": "image_1",
+                    "texture": {
+                        "key": "09-目的地内框未选中"
+                    },
+                    "x": 94,
+                    "y": 64,
+                    "scaleX": 0.3962031655586718,
+                    "scaleY": 0.4428931617567645
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "id": "f6837ad5-cf0b-45b1-9371-2195a9ef9842",
+            "label": "container",
+            "x": 752.4017174372077,
+            "y": 174.03519309192896,
+            "list": [
+                {
+                    "type": "Image",
+                    "id": "0265b25a-f9b6-4289-adcd-b8c559d6e80d",
+                    "label": "text",
+                    "x": 96.59828256279229,
+                    "y": 68.96480690807104,
+                    "scaleX": 6,
+                    "scaleY": 4
+                },
+                {
+                    "type": "Image",
+                    "id": "7ec9b139-98fb-4f97-abb4-28dc2da825a0",
+                    "label": "text_7",
+                    "x": 96.59828256279229,
+                    "y": 324.96480690807107,
+                    "scaleX": 6,
+                    "scaleY": 4
+                },
+                {
+                    "type": "Image",
+                    "id": "d4922a62-96cb-4307-b184-76b252d751a4",
+                    "label": "text_8",
+                    "x": 288.5982825627923,
+                    "y": 196.96480690807104,
+                    "scaleX": 6,
+                    "scaleY": 4
+                },
+                {
+                    "type": "Image",
+                    "id": "64fdfc69-0ba6-4c2d-9db5-4db4c9187b11",
+                    "label": "text_9",
+                    "x": 288.5982825627923,
+                    "y": 324.96480690807107,
+                    "scaleX": 6,
+                    "scaleY": 4
+                },
+                {
+                    "type": "Image",
+                    "id": "ca123c8f-97da-4506-b5c9-21d1b92e4197",
+                    "label": "text_10",
+                    "x": 288.5982825627923,
+                    "y": 68.96480690807104,
+                    "scaleX": 6,
+                    "scaleY": 4
+                },
+                {
+                    "type": "Image",
+                    "id": "c6ac14fa-133f-493a-9912-1df6b883a199",
+                    "label": "text_11",
+                    "x": 96.59828256279229,
+                    "y": 196.96480690807104,
+                    "scaleX": 6,
+                    "scaleY": 4
+                }
+            ]
+        },
+        {
+            "type": "Image",
+            "id": "8d6cf894-3b05-4a28-9a5f-3fc7d9109c26",
+            "label": "left_map",
+            "texture": {
+                "key": "07-选择目的地箭头左"
+            },
+            "x": 100,
+            "y": 360,
+            "scaleX": 0.6258903341725988,
+            "scaleY": 0.6377554134541104
+        },
+        {
+            "type": "Image",
+            "id": "2d95c82a-b805-4cdf-a987-62f7347462ab",
+            "label": "right_map",
+            "texture": {
+                "key": "08-选择目的地箭头右"
+            },
+            "x": 611,
+            "y": 365,
+            "scaleX": 0.6258903341725988,
+            "scaleY": 0.6377554134541104
+        },
+        {
+            "type": "Image",
+            "id": "34be81ca-9b41-448b-afaf-85fd8bfb4026",
+            "label": "submit",
+            "texture": {
+                "key": "24-出发按钮"
+            },
+            "x": 652,
+            "y": 646,
+            "scaleX": 0.34263181206964727,
+            "scaleY": 0.3583420072397092
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor - Scene Editor",
+        "url": "https://phaser.io/editor",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 5
+    }
+}

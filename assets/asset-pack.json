@@ -1,0 +1,78 @@
+{
+    "section1": {
+        "files": [
+            {
+                "url": "assets/page1/02-仓库.png",
+                "type": "image",
+                "key": "02-仓库"
+            },
+            {
+                "url": "assets/page1/07-选择目的地箭头左.png",
+                "type": "image",
+                "key": "07-选择目的地箭头左"
+            },
+            {
+                "url": "assets/page1/08-选择目的地箭头右.png",
+                "type": "image",
+                "key": "08-选择目的地箭头右"
+            },
+            {
+                "url": "assets/page1/09-目的地内框未选中.png",
+                "type": "image",
+                "key": "09-目的地内框未选中"
+            },
+            {
+                "url": "assets/page1/10-目的地内框选中.png",
+                "type": "image",
+                "key": "10-目的地内框选中"
+            },
+            {
+                "url": "assets/page1/12-目的地01.png",
+                "type": "image",
+                "key": "12-目的地01"
+            },
+            {
+                "url": "assets/page1/15-装备栏未解锁.png",
+                "type": "image",
+                "key": "15-装备栏未解锁"
+            },
+            {
+                "url": "assets/page1/21-装备栏物品详情面板.png",
+                "type": "image",
+                "key": "21-装备栏物品详情面板"
+            },
+            {
+                "url": "assets/page1/22-装备栏物品详情面板替换.png",
+                "type": "image",
+                "key": "22-装备栏物品详情面板替换"
+            },
+            {
+                "url": "assets/page1/23-装备栏物品详情面板卸下.png",
+                "type": "image",
+                "key": "23-装备栏物品详情面板卸下"
+            },
+            {
+                "url": "assets/page1/24-出发按钮.png",
+                "type": "image",
+                "key": "24-出发按钮"
+            },
+            {
+                "url": "assets/page1/25-出发按钮不可按.png",
+                "type": "image",
+                "key": "25-出发按钮不可按"
+            },
+            {
+                "url": "assets/dino.png",
+                "key": "dino",
+                "type": "image"
+            }
+        ]
+    },
+    "meta": {
+        "app": "Phaser Editor 2D - Asset Pack Editor",
+        "contentType": "phasereditor2d.pack.core.AssetContentType",
+        "url": "https://phasereditor2d.com",
+        "version": 2,
+        "showAllFilesInBlocks": false
+    }
+}

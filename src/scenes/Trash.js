@@ -38,12 +38,13 @@ export default class Trash extends Phaser.Scene {
 		
 
 		// map选择
+		const mapImgList = ["BM1-1","BM1-2","BM1-3","BM1-4","BM1-5","BM1-6"];
 		const container_1 = this.add.container(172, 170);
 		for (let i = 0; i < 6; i++) {
             let x = 94 + (i % 2) * 190;
             let y = 64 + Math.trunc(i / 2) * 140;
             
-            const button = this.add.image(x, y, '12-目的地01').setInteractive();
+            const button = this.add.image(x, y, mapImgList[i]).setInteractive();
             //button.setTint(0x808080); // 设置为灰色
             button.on('pointerdown', () => this.selectButton(button));
             button.scaleX = 0.4;

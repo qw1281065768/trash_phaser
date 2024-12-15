@@ -10,6 +10,36 @@
                 "url": "assets/guapen.png",
                 "type": "image",
                 "key": "guapen"
+            },
+            {
+                "url": "assets/maps/BM1-1.png",
+                "type": "image",
+                "key": "BM1-1"
+            },
+            {
+                "url": "assets/maps/BM1-2.png",
+                "type": "image",
+                "key": "BM1-2"
+            },
+            {
+                "url": "assets/maps/BM1-3.png",
+                "type": "image",
+                "key": "BM1-3"
+            },
+            {
+                "url": "assets/maps/BM1-4.png",
+                "type": "image",
+                "key": "BM1-4"
+            },
+            {
+                "url": "assets/maps/BM1-5.png",
+                "type": "image",
+                "key": "BM1-5"
+            },
+            {
+                "url": "assets/maps/BM1-6.png",
+                "type": "image",
+                "key": "BM1-6"
             }
         ]
     },

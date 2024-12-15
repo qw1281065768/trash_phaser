@@ -91,7 +91,7 @@ export default class WareHouse extends Phaser.Scene {
 
     async getItemList() {
         try {
-            const response = await fetch(`http://127.0.0.1:8999/api/v1/item/user_items?type=1&uid=${this.userId}`);
+            const response = await fetch(`http://127.0.0.1:38999/api/v1/item/user_items?type=1&uid=${this.userId}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

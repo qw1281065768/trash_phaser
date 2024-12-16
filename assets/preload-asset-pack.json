@@ -7,6 +7,26 @@
                 "key": "4001001"
             },
             {
+                "url": "assets/page1/11-目的地内框锁定.png",
+                "type": "image",
+                "key": "11-目的地内框锁定"
+            },
+            {
+                "url": "assets/page1/16-装备栏白色装备.png",
+                "type": "image",
+                "key": "16-装备栏白色装备"
+            },
+            {
+                "url": "assets/page1/17-装备栏绿色装备.png",
+                "type": "image",
+                "key": "17-装备栏绿色装备"
+            },
+            {
+                "url": "assets/page1/18-装备栏选中.png",
+                "type": "image",
+                "key": "18-装备栏选中"
+            },
+            {
                 "url": "assets/guapen.png",
                 "type": "image",
                 "key": "guapen"

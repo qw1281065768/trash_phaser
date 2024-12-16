@@ -37,16 +37,29 @@ export default class Trash extends Phaser.Scene {
 		container_top.add(warehouse_button);
 		
 
-		// map选择
-		const mapImgList = ["BM1-1","BM1-2","BM1-3","BM1-4","BM1-5","BM1-6"];
+		// map选择，读取用户等级，获取是否能解锁，能否解锁直接写在前端代码里，不要后端接口了
+		const mapInfo = [
+			{ name: "BM1-1", isLock: false },
+			{ name: "BM1-2", isLock: false },
+			{ name: "BM1-3", isLock: false },
+			{ name: "BM1-4", isLock: false },
+			{ name: "BM1-5", isLock: true },
+			{ name: "BM1-6", isLock: false }
+		];
+
 		const container_1 = this.add.container(172, 170);
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < mapInfo.length; i++) {
             let x = 94 + (i % 2) * 190;
             let y = 64 + Math.trunc(i / 2) * 140;
-            
-            const button = this.add.image(x, y, mapImgList[i]).setInteractive();
-            //button.setTint(0x808080); // 设置为灰色
-            button.on('pointerdown', () => this.selectButton(button));
+			const { isLock, name } = mapInfo[i];
+
+			const buttonImage = isLock ? '11-目的地内框锁定' : name;
+			const button = this.add.image(x, y, buttonImage);
+			if (!isLock) {
+				button.setInteractive();
+				button.on('pointerdown', () => this.selectMapButton(button));
+			}
+            //button.on('pointerdown', () => this.selectMapButton(button));
             button.scaleX = 0.4;
             button.scaleY = 0.5;
 
@@ -161,7 +174,7 @@ export default class Trash extends Phaser.Scene {
 	}
 
 	
-	selectButton(selectedButton) {
+	selectMapButton(selectedButton) {
         // 如果已有选中按钮，恢复其边框为默认
         if (this.selectedButton) {
             const previousBorder = this.buttons.find(b => b.button === this.selectedButton).border;

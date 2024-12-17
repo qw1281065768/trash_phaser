@@ -71,6 +71,13 @@ export default class Game extends Phaser.Scene {
 		//console.log(items);
 		this.buttons = [];
 		const container_1 = this.add.container(222, 140);
+		// 设置背景
+		const backgroundLeft = this.add.image(200, 250, '左边物品栏大面板');
+		backgroundLeft.scaleX = 0.35; // 设置锚点为中心
+		backgroundLeft.scaleY = 0.35;
+
+		//background.setDisplaySize(200, 150); // 设置背景图片的显示大小
+		container_1.add(backgroundLeft);
 
 		for (let i = 0; i < maxContains; i++) {
             let x = 44 + (i % 6) * 60;
@@ -107,9 +114,9 @@ export default class Game extends Phaser.Scene {
 		const container = this.add.container(552, 90); // 中心位置
 
 		// 设置背景
-		const background = this.add.image(285, 270, '21-装备栏物品详情面板');
-		background.scaleX = 0.85; // 设置锚点为中心
-		background.scaleY = 0.85;
+		const background = this.add.image(285, 290, '右边挂机中大面板');
+		background.scaleX = 0.35; // 设置锚点为中心
+		background.scaleY = 0.35;
 
 		//background.setDisplaySize(200, 150); // 设置背景图片的显示大小
 		container.add(background);
@@ -149,7 +156,7 @@ export default class Game extends Phaser.Scene {
 		container.add(displayText);*/
 
 		// 添加按钮
-		const xiexia = this.add.image(300, 380, '23-装备栏物品详情面板卸下')
+		const xiexia = this.add.image(300, 380, '停止按钮')
 			.setInteractive()
 			.on('pointerdown', () => {
 				console.log('按钮 1 被点击');

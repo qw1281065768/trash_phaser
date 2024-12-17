@@ -60,6 +60,21 @@
                 "url": "assets/maps/BM1-6.png",
                 "type": "image",
                 "key": "BM1-6"
+            },
+            {
+                "url": "assets/page1/停止按钮.png",
+                "type": "image",
+                "key": "停止按钮"
+            },
+            {
+                "url": "assets/page1/左边物品栏大面板.png",
+                "type": "image",
+                "key": "左边物品栏大面板"
+            },
+            {
+                "url": "assets/page1/右边挂机中大面板.png",
+                "type": "image",
+                "key": "右边挂机中大面板"
             }
         ]
     },

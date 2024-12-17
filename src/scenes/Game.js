@@ -114,7 +114,7 @@ export default class Game extends Phaser.Scene {
 		const container = this.add.container(552, 90); // 中心位置
 
 		// 设置背景
-		const background = this.add.image(285, 290, '右边挂机中大面板');
+		const background = this.add.image(285, 300, '右边挂机中大面板');
 		background.scaleX = 0.35; // 设置锚点为中心
 		background.scaleY = 0.35;
 
@@ -193,7 +193,21 @@ export default class Game extends Phaser.Scene {
 	create() {
 
 		this.editorCreate();
-		this.cameras.main.setBackgroundColor('#3498db'); 
+		//this.cameras.main.setBackgroundColor('#3498db'); 
+		 // 添加背景图片
+		 //this.add.image(0, 0, '挂机背景').setOrigin(0, 0);
+		 //this.cameras.main.setBounds(0, 0, this.game.config.width, this.game.config.height);
+		 // 添加背景图片
+		 const backgroundImage = this.add.image(0, 0, '挂机背景');
+
+		 // 设置原点为 (0, 0) 以便从左上角开始
+		 backgroundImage.setOrigin(0, 0);
+	 
+		 // 调整图片大小以适应场景
+		 backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+	 
+		 // 设置深度，确保背景在最底层
+		 backgroundImage.setDepth(-1);
 	}
 
 	/* END-USER-CODE */

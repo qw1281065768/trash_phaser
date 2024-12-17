@@ -75,6 +75,16 @@
                 "url": "assets/page1/右边挂机中大面板.png",
                 "type": "image",
                 "key": "右边挂机中大面板"
+            },
+            {
+                "url": "assets/page1/挂机背景.jpg",
+                "type": "image",
+                "key": "挂机背景"
+            },
+            {
+                "url": "assets/page1/01-地点图层.png",
+                "type": "image",
+                "key": "01-地点图层"
             }
         ]
     },

@@ -204,7 +204,18 @@ export default class Trash extends Phaser.Scene {
 	create() {
 		this.editorCreate();
 		// add the background
-		this.cameras.main.setBackgroundColor('#3498db'); 
+		this.cameras.main.setBackgroundColor('#90ee90'); 
+		// 添加背景图片
+		const backgroundImage = this.add.image(0, 0, '01-地点图层');
+
+		// 设置原点为 (0, 0) 以便从左上角开始
+		backgroundImage.setOrigin(0, 0);
+	
+		// 调整图片大小以适应场景
+		backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+	
+		// 设置深度，确保背景在最底层
+		backgroundImage.setDepth(-1);
 	}
 
 	/* END-USER-CODE */

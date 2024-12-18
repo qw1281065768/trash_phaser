@@ -31,7 +31,7 @@ export default class WareHouse extends Phaser.Scene {
         this.description = null;
         this.sellAmountInput = null;
         this.items = [];
-        this.userId=1;
+        this.userId=2;
 
 	}
 
@@ -91,7 +91,7 @@ export default class WareHouse extends Phaser.Scene {
 
     async getItemList() {
         try {
-            const response = await fetch(`http://127.0.0.1:38999/api/v1/item/user_items?type=1&uid=${this.userId}`);
+            const response = await fetch(`http://127.0.0.1:39998/api/v1/item/user_items?type=1&uid=${this.userId}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -199,7 +199,7 @@ export default class WareHouse extends Phaser.Scene {
             const x = (index % 6) * 60; // 计算 x 坐标
             const y = Math.floor(index / 6) * 60; // 计算 y 坐标
 
-            const itemSlot = this.add.sprite(x, y, item.oriImgUrl) // 使用物品的相应图像
+            const itemSlot = this.add.sprite(x, y, item.id) // 使用物品的相应图像
                 .setOrigin(0.5)
                 .setInteractive();
             itemSlot.scaleX = 0.2;

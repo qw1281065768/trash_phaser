@@ -39,14 +39,28 @@ export default class WareHouse extends Phaser.Scene {
 
 	showWarehouse() {
         // 创建覆盖全屏的背景
-        const background = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x000000, 1).setOrigin(0);
+        //const background = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x000000, 1).setOrigin(0);
+        // 添加背景图片
+		 const backgroundImage = this.add.image(0, 0, 'bg-仓库');
+		 // 设置原点为 (0, 0) 以便从左上角开始
+		 backgroundImage.setOrigin(0, 0);
+		 // 调整图片大小以适应场景
+		 backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+		 // 设置深度，确保背景在最底层
+		 backgroundImage.setDepth(-1);
         
 		// 物品栏
         const itemContainer = this.add.container(200, 100);
         this.createItemGrid(itemContainer);
+        
 
         // 物品详情
         const detailContainer = this.add.container(800, 100);
+        // 设置背景
+		const backgroundRight = this.add.image(250, 250, '详情面板');
+		backgroundRight.scaleX = 0.35; // 设置锚点为中心
+		backgroundRight.scaleY = 0.35;
+        detailContainer.add(backgroundRight);
         this.createItemDetail(detailContainer);
 
         // 顶部信息
@@ -58,7 +72,7 @@ export default class WareHouse extends Phaser.Scene {
         const closeButton = this.add.text(this.cameras.main.width - 100, 20, '关闭', { fontSize: '24px', fill: '#ff0000' })
             .setInteractive()
             .on('pointerdown', () => {
-                background.destroy();
+                backgroundImage.destroy();
                 closeButton.destroy();
                 categoryIcons.forEach(icon => icon.destroy());
                 itemContainer.destroy();
@@ -117,14 +131,14 @@ export default class WareHouse extends Phaser.Scene {
     }
     createItemGrid(container) {
 		const itemSlots = [];
-		const slotWidth = 60;  // 每个槽的宽度
+		/*const slotWidth = 60;  // 每个槽的宽度
 		const slotHeight = 60; // 每个槽的高度
 		const cols = 6; // 每行的槽数
 		for (let i = 0; i < this.items.length; i++) { // 使用 items 数组的长度
 			const x = (i % cols) * slotWidth; // 根据列数计算 x 坐标
 			const y = Math.floor(i / cols) * slotHeight; // 根据行数计算 y 坐标
 
-			const itemSlot = this.add.sprite(x, y, 'item1') // 使用物品图像
+			const itemSlot = this.add.sprite(x, y, '大框') // 使用物品图像
 				.setOrigin(0.5)
 				.setInteractive();
 
@@ -137,7 +151,19 @@ export default class WareHouse extends Phaser.Scene {
 
 			itemSlots.push(itemSlot);
 			container.add(itemSlot);
-		}
+		}*/
+        /*const maxContains = 70;
+
+        for (let i = 0; i < maxContains; i++) {
+            const x = (i % 7) * 90; // 计算 x 坐标
+            const y = Math.floor(i / 7) * 90; // 计算 y 坐标
+            // 先贴背景，再贴物品
+            const itemSlot = this.add.sprite(x+200, y+100, '大框') // 使用物品的相应图像
+            .setOrigin(0.5);
+            itemSlot.scaleX = 0.2;
+            itemSlot.scaleY = 0.2;
+            //itemSlot.setDepth(0);
+        }*/
 		container.setSize(400, 600); // 设置容器大小
 	}
 
@@ -156,12 +182,13 @@ export default class WareHouse extends Phaser.Scene {
 	}
 
     createItemDetail(container) {
+
         // 使用类属性定义 UI 组件
-        this.title = this.add.text(0, 0, '物品详情', { fontSize: '24px', fill: '#fff' }).setOrigin(0.5);
-        this.itemImage = this.add.image(0, 40, 'item1').setOrigin(0.5);
-        this.description = this.add.text(0, 100, '物品描述...', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
-        this.sellAmountInput = this.add.text(0, 140, '售出数量: 0', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
-        const sellButton = this.add.text(0, 180, '出售', { fontSize: '24px', fill: '#0f0' })
+        this.title = this.add.text(250, 0, '物品详情', { fontSize: '24px', fill: '#fff' }).setOrigin(0.5);
+        this.itemImage = this.add.image(250, 40, 'item1').setOrigin(0.5);
+        this.description = this.add.text(250, 100, '物品描述...', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
+        this.sellAmountInput = this.add.text(250, 140, '售出数量: 0', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
+        const sellButton = this.add.text(250, 180, '出售', { fontSize: '24px', fill: '#0f0' })
             .setInteractive()
             .on('pointerdown', () => {
                 // 处理出售逻辑
@@ -188,14 +215,14 @@ export default class WareHouse extends Phaser.Scene {
         itemContainer.removeAll(true); // 假设 itemContainer 是物品槽的容器
 
         filteredItems.forEach((item, index) => {
-            const x = (index % 6) * 60; // 计算 x 坐标
-            const y = Math.floor(index / 6) * 60; // 计算 y 坐标
+            const x = (index % 7) * 90; // 计算 x 坐标
+            const y = Math.floor(index / 7) * 90; // 计算 y 坐标
 
             const itemSlot = this.add.sprite(x, y, item.id) // 使用物品的相应图像
                 .setOrigin(0.5)
                 .setInteractive();
-            itemSlot.scaleX = 0.2;
-		    itemSlot.scaleY = 0.2;
+            itemSlot.scaleX = 0.15;
+		    itemSlot.scaleY = 0.15;
 
             itemSlot.setData('index', index); // 存储索引数据
             itemSlot.on('pointerdown', () => {

@@ -2,6 +2,21 @@
     "section1": {
         "files": [
             {
+                "url": "assets/page1/bg-仓库.jpg",
+                "type": "image",
+                "key": "bg-仓库"
+            },
+            {
+                "url": "assets/page1/详情面板.png",
+                "type": "image",
+                "key": "详情面板"
+            },
+            {
+                "url": "assets/page1/大框.png",
+                "type": "image",
+                "key": "大框"
+            },
+            {
                 "url": "assets/items/parts/4001001.png",
                 "type": "image",
                 "key": "4001001"

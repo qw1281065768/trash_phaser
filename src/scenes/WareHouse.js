@@ -68,7 +68,7 @@ export default class WareHouse extends Phaser.Scene {
             });
 
         // 物品种类
-        const categories = ['全部', '类型1', '类型2', '类型3', '类型4'];
+        const categories = ['全部', '类型1', '类型2', '类型3', '类型4', '类型5'];
         const categoryIcons = [];
         categories.forEach((category, index) => {
             const icon = this.add.text(50, 100 + index * 60, category, { fontSize: '24px', fill: '#fff' })
@@ -103,19 +103,11 @@ export default class WareHouse extends Phaser.Scene {
                 name: item.name, // 物品名称
                 type: item.type, // 物品类型
                 typeName: item.type_name, // 类型名称
+                count: item.count, // 数量
                 property: item.property, // 属性
                 propertyName: item.property_name, // 属性名称
-                duringTime: item.during_time, // 持续时间
                 description: item.desc, // 描述
-                oriImgUrl: item.ori_img_url, // 原始图像 URL
-                tinyImgUrl: item.tiny_img_url, // 小图像 URL
-                source: item.source, // 来源
-                level: item.level, // 等级
-                material: item.material, // 材料
-                weight: item.weight, // 重量
-                exp: item.exp, // 经验
-                price: item.price, // 价格
-                probability: item.Probability // 概率
+                price: item.price // 价格
             }));
 
             console.log('Item List:', this.items);
@@ -180,11 +172,11 @@ export default class WareHouse extends Phaser.Scene {
     }
 
     async updateItemDisplay(itemContainer, selectedTypeIndex) {
-        const selectedType = ['全部', '类型1', '类型2', '类型3', '类型4'][selectedTypeIndex];
+        const selectedType = [0, 1, 2, 3, 4, 5][selectedTypeIndex];
         let filteredItems;
         await this.getItemList();
 
-        if (selectedType === '全部') {
+        if (selectedType === 0) {
             // 如果选择的是“全部”，则显示所有物品
             filteredItems = this.items;
         } else {

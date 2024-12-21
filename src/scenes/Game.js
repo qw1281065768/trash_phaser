@@ -10,14 +10,75 @@ export default class Game extends Phaser.Scene {
 
 	constructor() {
 		super("Game");
-
+		this.userId=2;
+		this.items = [];
 		/* START-USER-CTR-CODE */
 		// Write your code here.
 		/* END-USER-CTR-CODE */
 	}
 
+	// 看看如何刷新
+	async updateItemDisplay(container_1) {
+		const maxContains = 60;
+		for (let i = 0; i < maxContains; i++) {
+			let x = 44 + (i % 6) * 60;
+			let y = 20 + Math.trunc(i / 6) * 50;
+	
+			const isItem = i < this.items.length; // Use this.items instead of itemList
+	
+			const imgName = isItem ? this.items[i].id : '16-装备栏白色装备'; // Ensure ori_img_url is available
+			const button = this.add.image(x, y, imgName);
+			if (isItem) {
+				button.setInteractive();
+				button.on('pointerdown', () => this.selectMapButton(button));
+				button.scaleX = 0.1;
+				button.scaleY = 0.1;
+			} else {
+				button.scaleX = 0.2;
+				button.scaleY = 0.2;
+			}
+	
+			const border = this.add.image(x, y, '09-目的地内框未选中');
+			border.scaleX = 0.1;
+			border.scaleY = 0.2;
+	
+			container_1.add(button);
+			container_1.add(border);
+			this.buttons.push({ button, border });
+		}
+	}
+	
+	async getItemList() {
+		try {
+			const response = await fetch(`http://127.0.0.1:39998/api/v1/trash/check_bag?uid=${this.userId}`);
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			const apiItems = await response.json();
+	        console.log('API Response:', apiItems);
+
+			// Convert to the required structure
+			this.items = apiItems.bag_detail.map(item => ({
+				id: item.id,
+				name: item.name,
+				type: item.type,
+				typeName: item.type_name,
+				count: item.count,
+				property: item.property,
+				propertyName: item.property_name,
+				description: item.desc,
+				price: item.price,
+				ori_img_url: item.ori_img_url // Ensure this is included
+			}));
+	
+			console.log('Item List:', this.items);
+		} catch (error) {
+			console.error('There has been a problem with your fetch operation:', error);
+		}
+	}
+
 	/** @returns {void} */
-	editorCreate() {
+	async editorCreate() {
 
 
 		// 顶部容器，包含仓库，时间，
@@ -41,8 +102,7 @@ export default class Game extends Phaser.Scene {
 		this.add.text(100, 100, 'You selected button ' + this.selectedButtonIndex, { fontSize: '32px', fill: '#fff' });*/
 
 
-		// 左边，背包大小10*6，包含已收集的物品列表
-		const maxContains = 60;
+
 		//const itemList = []; // 通过接口获取
 		const itemList = [
 			{
@@ -67,46 +127,22 @@ export default class Game extends Phaser.Scene {
 				"Probability": 0
 			}
 		];
+
+
 		
-		//console.log(items);
 		this.buttons = [];
 		const container_1 = this.add.container(222, 140);
+		
 		// 设置背景
 		const backgroundLeft = this.add.image(200, 250, '左边物品栏大面板');
 		backgroundLeft.scaleX = 0.35; // 设置锚点为中心
 		backgroundLeft.scaleY = 0.35;
-
-		//background.setDisplaySize(200, 150); // 设置背景图片的显示大小
+	
 		container_1.add(backgroundLeft);
-
-		for (let i = 0; i < maxContains; i++) {
-            let x = 44 + (i % 6) * 60;
-            let y = 20 + Math.trunc(i / 6) * 50;
-            
-			const isItem = i < itemList.length;
-
-			const imgName = isItem ? itemList[i].ori_img_url : '16-装备栏白色装备';
-			const button = this.add.image(x, y, imgName);
-			if (isItem) {
-				// 该物品框放置物品，否则为空
-				button.setInteractive();
-            	button.on('pointerdown', () => this.selectMapButton(button));
-				button.scaleX = 0.1;
-				button.scaleY = 0.1;
-			} else {
-				button.scaleX = 0.2;
-				button.scaleY = 0.2;
-			}
-
-
-            const border = this.add.image(x, y, '09-目的地内框未选中');
-            border.scaleX = 0.1;
-            border.scaleY = 0.2;
-
-            container_1.add(button);
-            container_1.add(border);
-            this.buttons.push({ button, border });
-        }
+	
+		// Fetch item list and update display
+		await this.getItemList(); // Wait for the item list to be fetched
+		await this.updateItemDisplay(container_1); // Then update the display
 
 
 		// 右边，地图内容展示

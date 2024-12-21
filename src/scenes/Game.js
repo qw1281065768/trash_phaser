@@ -19,6 +19,8 @@ export default class Game extends Phaser.Scene {
 
 	// 看看如何刷新
 	async updateItemDisplay(container_1) {
+		container_1.removeAll(true);
+
 		const maxContains = 60;
 		for (let i = 0; i < maxContains; i++) {
 			let x = 44 + (i % 6) * 60;
@@ -48,6 +50,21 @@ export default class Game extends Phaser.Scene {
 		}
 	}
 	
+	startRefreshingItems(container) {
+        this.refreshInterval = setInterval(async () => {
+            const itemList = await this.getItemList(); // 获取物品列表
+            await this.updateItemDisplay(container, itemList); // 更新显示
+        }, 5000); // 每5秒刷新一次，您可以根据需要调整时间
+    }
+
+    shutdown() {
+        // 清理定时器
+        if (this.refreshInterval) {
+            clearInterval(this.refreshInterval);
+        }
+    }
+
+
 	async getItemList() {
 		try {
 			const response = await fetch(`http://127.0.0.1:39998/api/v1/trash/check_bag?uid=${this.userId}`);
@@ -80,6 +97,16 @@ export default class Game extends Phaser.Scene {
 	/** @returns {void} */
 	async editorCreate() {
 
+		this.backgroundImage = this.add.image(0, 0, '挂机背景');
+
+		// 设置原点为 (0, 0) 以便从左上角开始
+		this.backgroundImage.setOrigin(0, 0);
+	
+		// 调整图片大小以适应场景
+		this.backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+	
+		// 设置深度，确保背景在最底层
+		this.backgroundImage.setDepth(-1);
 
 		// 顶部容器，包含仓库，时间，
 		const container_top = this.add.container(0,0);
@@ -104,7 +131,7 @@ export default class Game extends Phaser.Scene {
 
 
 		//const itemList = []; // 通过接口获取
-		const itemList = [
+		/*const itemList = [
 			{
 				"id": 1005003,
 				"name": "蓝色钩子",
@@ -126,10 +153,8 @@ export default class Game extends Phaser.Scene {
 				"price": 99,
 				"Probability": 0
 			}
-		];
+		];*/
 
-
-		
 		this.buttons = [];
 		const container_1 = this.add.container(222, 140);
 		
@@ -141,9 +166,10 @@ export default class Game extends Phaser.Scene {
 		container_1.add(backgroundLeft);
 	
 		// Fetch item list and update display
-		await this.getItemList(); // Wait for the item list to be fetched
-		await this.updateItemDisplay(container_1); // Then update the display
-
+		//await this.getItemList(); // Wait for the item list to be fetched
+		//await this.updateItemDisplay(container_1); // Then update the display
+		// 开始周期性获取物品列表
+        this.startRefreshingItems(container_1);
 
 		// 右边，地图内容展示
 		// 创建一个 Container
@@ -192,28 +218,27 @@ export default class Game extends Phaser.Scene {
 		container.add(displayText);*/
 
 		// 添加按钮
-		const xiexia = this.add.image(300, 380, '停止按钮')
+		const stopButton = this.add.image(300, 380, '停止按钮')
 			.setInteractive()
 			.on('pointerdown', () => {
 				console.log('按钮 1 被点击');
 			});
-		xiexia.scaleX = 0.4;
-		xiexia.scaleY = 0.4;
-
-		/*const swap = this.add.image(325, 360, '22-装备栏物品详情面板替换')
-			.setInteractive()
-			.on('pointerdown', () => {
-				console.log('按钮 2 被点击');
-			});
-		swap.scaleX = 0.4;
-		swap.scaleY = 0.4;*/
-
-		container.add(xiexia);
-		//container.add(swap);
-
+		stopButton.scaleX = 0.4;
+		stopButton.scaleY = 0.4;
+		container.add(stopButton);
 
 		this.events.emit("scene-awake");
 
+		const closeButton = this.add.text(this.cameras.main.width - 100, 20, '关闭', { fontSize: '24px', fill: '#ff0000' })
+		.setInteractive()
+		.on('pointerdown', () => {
+			container.destroy();
+			container_1.destroy();
+			container_top.destroy();
+			this.backgroundImage.destroy();
+			this.scene.start('Trash');
+		});
+		container_top.add(closeButton);
 
 	}
 
@@ -223,9 +248,16 @@ export default class Game extends Phaser.Scene {
 
 	init(data) {
         this.selectedButtonIndex = data.selectedButtonIndex; // map id
+		// 开始挂机
+		
 
     }
 
+	selectWareHouseButton() {
+		// 启动仓库场景
+        this.scene.launch('WareHouse');
+	}
+	
 	create() {
 
 		this.editorCreate();
@@ -234,16 +266,6 @@ export default class Game extends Phaser.Scene {
 		 //this.add.image(0, 0, '挂机背景').setOrigin(0, 0);
 		 //this.cameras.main.setBounds(0, 0, this.game.config.width, this.game.config.height);
 		 // 添加背景图片
-		 const backgroundImage = this.add.image(0, 0, '挂机背景');
-
-		 // 设置原点为 (0, 0) 以便从左上角开始
-		 backgroundImage.setOrigin(0, 0);
-	 
-		 // 调整图片大小以适应场景
-		 backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
-	 
-		 // 设置深度，确保背景在最底层
-		 backgroundImage.setDepth(-1);
 	}
 
 	/* END-USER-CODE */

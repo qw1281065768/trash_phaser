@@ -38,20 +38,20 @@ export default class Trash extends Phaser.Scene {
 		
 
 		// map选择，读取用户等级，获取是否能解锁，能否解锁直接写在前端代码里，不要后端接口了
-		const mapInfo = [
-			{ name: "BM1-1", isLock: false },
-			{ name: "BM1-2", isLock: false },
-			{ name: "BM1-3", isLock: false },
-			{ name: "BM1-4", isLock: false },
-			{ name: "BM1-5", isLock: true },
-			{ name: "BM1-6", isLock: false }
+		this.mapInfo = [
+			{ name: "BM1-1",id: 1001, isLock: false },
+			{ name: "BM1-2",id: 1002, isLock: false },
+			{ name: "BM1-3",id: 1003, isLock: false },
+			{ name: "BM1-4",id: 1004, isLock: false },
+			{ name: "BM1-5",id: 1005, isLock: true },
+			{ name: "BM1-6",id: 1006, isLock: false }
 		];
 
 		const container_1 = this.add.container(172, 170);
-		for (let i = 0; i < mapInfo.length; i++) {
+		for (let i = 0; i < this.mapInfo.length; i++) {
             let x = 94 + (i % 2) * 190;
             let y = 64 + Math.trunc(i / 2) * 140;
-			const { isLock, name } = mapInfo[i];
+			const { isLock, name } = this.mapInfo[i];
 
 			const buttonImage = isLock ? '11-目的地内框锁定' : name;
 			const button = this.add.image(x, y, buttonImage);
@@ -77,7 +77,7 @@ export default class Trash extends Phaser.Scene {
 
 		// container
 		// 读取 JSON 数据
-		const buttonData = {
+		/*const buttonData = {
 			"buttons": [
 				{ "title": "按钮 1", "description": "基础介绍 1", "isUnlocked": true },
 				{ "title": "按钮 2", "description": "基础介绍 2", "isUnlocked": false },
@@ -86,7 +86,7 @@ export default class Trash extends Phaser.Scene {
 				{ "title": "按钮 5", "description": "基础介绍 5", "isUnlocked": true },
 				{ "title": "按钮 6", "description": "基础介绍 6", "isUnlocked": false }
 			]
-		};
+		};*/
 		this.buttons_2 = [];
 		const container_2 = this.add.container(752, 170);
 		for (let i = 0; i < 6; i++) {
@@ -195,11 +195,32 @@ export default class Trash extends Phaser.Scene {
         if (this.selectedButton) {
             const selectedIndex = this.buttons.findIndex(b => b.button === this.selectedButton);
             console.log('Selected button index:', selectedIndex); // 记录选中的按钮索引
+			const mapid = this.mapInfo[selectedIndex].id
+
+			// 开始挂机
+			this.startHang(mapid)
+
 
             // 跳转到下一个场景，并带上选中按钮的标记
             this.scene.start('Game', { selectedButtonIndex: selectedIndex });
         }
     }
+
+	async startHang(mapid) {
+		this.userId = 2
+		try {
+			const response = await fetch(`http://127.0.0.1:39998/api/v1/trash/start_hanging?uid=${this.userId}&mapid=${mapid}&tools=1`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+			const result = await response.json();
+			console.log('API call successful:', result);
+		} catch (error) {
+			console.error('Error while calling API:', error);
+			throw error; // 抛出错误以便在 submitSelection 中处理
+		}
+	}
+
 
 	create() {
 		this.editorCreate();

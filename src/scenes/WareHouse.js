@@ -11,20 +11,6 @@ export default class WareHouse extends Phaser.Scene {
 	constructor() {
 		super("WareHouse");
 
-		// 定义物品数据
-        /*this.items = [
-            { name: '物品1', image: 'item1', description: '这是物品1的描述',type: '类型1', quantity: 10 },
-            { name: '物品2', image: 'item2', description: '这是物品2的描述',type: '类型1', quantity: 5 },
-            { name: '物品3', image: 'item3', description: '这是物品3的描述',type: '类型1', quantity: 3 },
-            { name: '物品4', image: 'item4', description: '这是物品4的描述',type: '类型1', quantity: 8 },
-            { name: '物品5', image: 'item5', description: '这是物品5的描述',type: '类型2', quantity: 2 },
-			{ name: '物品6', image: 'item6', description: '这是物品6的描述',type: '类型2', quantity: 10 },
-            { name: '物品7', image: 'item7', description: '这是物品7的描述',type: '类型2', quantity: 5 },
-            { name: '物品8', image: 'item8', description: '这是物品8的描述',type: '类型3', quantity: 3 },
-            { name: '物品9', image: 'item9', description: '这是物品9的描述',type: '类型3', quantity: 8 },
-            { name: '物品10', image: 'item10', description: '这是物品10的描述',type: '类型4', quantity: 2 }
-        ];*/
-
 		// 初始化 UI 组件的属性
         this.title = null;
         this.itemImage = null;
@@ -176,7 +162,8 @@ export default class WareHouse extends Phaser.Scene {
 		}
         // 更新物品详情区域的内容
         this.title.setText(item.name); // 更新标题
-        this.itemImage.setTexture(item.image); // 更新物品图片
+        this.itemImage.setTexture(item.id); // 更新物品图片
+
         this.description.setText(item.description); // 更新描述
         this.sellAmountInput.setText(`售出数量: ${item.quantity}`); // 显示数量
 	}
@@ -184,11 +171,13 @@ export default class WareHouse extends Phaser.Scene {
     createItemDetail(container) {
 
         // 使用类属性定义 UI 组件
-        this.title = this.add.text(250, 0, '物品详情', { fontSize: '24px', fill: '#fff' }).setOrigin(0.5);
-        this.itemImage = this.add.image(250, 40, 'item1').setOrigin(0.5);
-        this.description = this.add.text(250, 100, '物品描述...', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
-        this.sellAmountInput = this.add.text(250, 140, '售出数量: 0', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
-        const sellButton = this.add.text(250, 180, '出售', { fontSize: '24px', fill: '#0f0' })
+        this.title = this.add.text(120, -20, '物品详情', { fontSize: '20px', fill: '#fff' }).setOrigin(0.5);
+        this.itemImage = this.add.image(120, 90, 'placeholderImage').setOrigin(0.5);
+        this.itemImage.scaleX = 0.25;
+        this.itemImage.scaleY = 0.25;
+        this.description = this.add.text(120, 200, '物品描述...', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
+        this.sellAmountInput = this.add.text(120, 240, '售出数量: 0', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
+        const sellButton = this.add.text(360, 500, '出售', { fontSize: '24px', fill: '#0f0' })
             .setInteractive()
             .on('pointerdown', () => {
                 // 处理出售逻辑
@@ -235,7 +224,8 @@ export default class WareHouse extends Phaser.Scene {
         // 如果没有物品可显示，可以更新物品详情区域以显示消息
         if (filteredItems.length === 0) {
             this.title.setText('无可用物品');
-            this.itemImage.setTexture('defaultImage'); // 使用默认图像
+            //this.itemImage.setTexture('defaultImage'); // 使用默认图像
+            this.itemImage.setVisible(false);
             this.description.setText('没有此类型的物品。');
             this.sellAmountInput.setText('售出数量: 0');
         }

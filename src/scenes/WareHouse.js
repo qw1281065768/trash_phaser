@@ -116,40 +116,6 @@ export default class WareHouse extends Phaser.Scene {
         }
     }
     createItemGrid(container) {
-		const itemSlots = [];
-		/*const slotWidth = 60;  // 每个槽的宽度
-		const slotHeight = 60; // 每个槽的高度
-		const cols = 6; // 每行的槽数
-		for (let i = 0; i < this.items.length; i++) { // 使用 items 数组的长度
-			const x = (i % cols) * slotWidth; // 根据列数计算 x 坐标
-			const y = Math.floor(i / cols) * slotHeight; // 根据行数计算 y 坐标
-
-			const itemSlot = this.add.sprite(x, y, '大框') // 使用物品图像
-				.setOrigin(0.5)
-				.setInteractive();
-
-			itemSlot.setData('index', i); // 存储索引数据
-			itemSlot.on('pointerdown', () => {
-				itemSlots.forEach(slot => slot.clearTint()); // 清除其他选中状态
-				itemSlot.setTint(0xffff00); // 选中边框颜色
-				this.updateItemDetail(itemSlot);
-			});
-
-			itemSlots.push(itemSlot);
-			container.add(itemSlot);
-		}*/
-        /*const maxContains = 70;
-
-        for (let i = 0; i < maxContains; i++) {
-            const x = (i % 7) * 90; // 计算 x 坐标
-            const y = Math.floor(i / 7) * 90; // 计算 y 坐标
-            // 先贴背景，再贴物品
-            const itemSlot = this.add.sprite(x+200, y+100, '大框') // 使用物品的相应图像
-            .setOrigin(0.5);
-            itemSlot.scaleX = 0.2;
-            itemSlot.scaleY = 0.2;
-            //itemSlot.setDepth(0);
-        }*/
 		container.setSize(400, 600); // 设置容器大小
 	}
 
@@ -205,20 +171,34 @@ export default class WareHouse extends Phaser.Scene {
 
         filteredItems.forEach((item, index) => {
             const x = (index % 7) * 90; // 计算 x 坐标
-            const y = Math.floor(index / 7) * 90; // 计算 y 坐标
+            const y = Math.floor(index / 7) * 100; // 计算 y 坐标
+
+            const rectWidth = 80;
+            const rectHeight = 95;
+    
+            // 添加背景图
+            const itemBackground = this.add.image(x, y, '大框').setOrigin(0.5).setDisplaySize(rectWidth, rectHeight);
+            itemBackground.setInteractive();
 
             const itemSlot = this.add.sprite(x, y, item.id) // 使用物品的相应图像
                 .setOrigin(0.5)
-                .setInteractive();
+                //.setInteractive();
             itemSlot.scaleX = 0.15;
 		    itemSlot.scaleY = 0.15;
 
-            itemSlot.setData('index', index); // 存储索引数据
-            itemSlot.on('pointerdown', () => {
-                this.updateItemDetail(itemSlot);
+            // 添加数量
+            const itemCountText = this.add.text(x, y + 40, `${item.count}`, { fontSize: '16px', fill: '#fff' })
+            .setOrigin(0.5);
+
+            itemBackground.setData('index', index); // 存储索引数据
+            itemBackground.on('pointerdown', () => {
+                this.updateItemDetail(itemBackground);
             });
 
+
+            itemContainer.add(itemBackground);
             itemContainer.add(itemSlot); // 将物品槽添加到容器中
+            itemContainer.add(itemCountText);
         });
 
         // 如果没有物品可显示，可以更新物品详情区域以显示消息

@@ -25,28 +25,39 @@ export default class Game extends Phaser.Scene {
 		for (let i = 0; i < maxContains; i++) {
 			let x = 44 + (i % 6) * 60;
 			let y = 20 + Math.trunc(i / 6) * 50;
+
+			const rectWidth = 40;
+            const rectHeight = 45;
+
+			// 贴入背景
+			const itemBackground = this.add.image(x, y, '16-装备栏白色装备').setOrigin(0.5).setDisplaySize(rectWidth, rectHeight);
+            itemBackground.setInteractive();
+
 	
 			const isItem = i < this.items.length; // Use this.items instead of itemList
 	
-			const imgName = isItem ? this.items[i].id : '16-装备栏白色装备'; // Ensure ori_img_url is available
-			const button = this.add.image(x, y, imgName);
+			//const imgName = isItem ? this.items[i].id : '16-装备栏白色装备'; // Ensure ori_img_url is available
+
+			/*const border = this.add.image(x, y, '09-目的地内框未选中');
+			border.scaleX = 0.1;
+			border.scaleY = 0.2;*/
+	
+			container_1.add(itemBackground);
 			if (isItem) {
-				button.setInteractive();
-				button.on('pointerdown', () => this.selectMapButton(button));
+				const button = this.add.image(x, y, this.items[i].id);
 				button.scaleX = 0.1;
 				button.scaleY = 0.1;
-			} else {
-				button.scaleX = 0.2;
-				button.scaleY = 0.2;
+				
+				// 添加数量
+				const itemCountText = this.add.text(x, y + 20, `${this.items[i].count}`, { fontSize: '16px', fill: '#fff' })
+				.setOrigin(0.5);
+				container_1.add(button);
+				container_1.add(itemCountText);
 			}
-	
-			const border = this.add.image(x, y, '09-目的地内框未选中');
-			border.scaleX = 0.1;
-			border.scaleY = 0.2;
-	
-			container_1.add(button);
-			container_1.add(border);
-			this.buttons.push({ button, border });
+
+
+			//container_1.add(border);
+			//this.buttons.push({ button, border });
 		}
 	}
 	

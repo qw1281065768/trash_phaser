@@ -118,43 +118,6 @@ export default class Game extends Phaser.Scene {
         warehouse_button.scaleY = 0.3;
 		container_top.add(warehouse_button);
 
-
-		// text_1
-		/*const text_1 = this.add.text(443, 246, "", {});
-		text_1.scaleX = 4.35954909583362;
-		text_1.scaleY = 8.410515251512745;
-		text_1.text = "Game On\n";
-		text_1.setStyle({  });
-
-		this.add.text(100, 100, 'You selected button ' + this.selectedButtonIndex, { fontSize: '32px', fill: '#fff' });*/
-
-
-
-		//const itemList = []; // 通过接口获取
-		/*const itemList = [
-			{
-				"id": 1005003,
-				"name": "蓝色钩子",
-				
-				"type": 1,
-				"type_name": "生产工具",
-				"desc": "捡垃圾捡垃圾捡垃圾捡垃圾捡垃圾捡垃圾",
-				"ori_img_url": "4001001",
-				"price": 99,
-				"Probability": 0
-			},
-			{
-				"id": 1005003,
-				"name": "蓝色钩子",
-				"type": 1,
-				"type_name": "生产工具",
-				"desc": "捡垃圾捡垃圾捡垃圾捡垃圾捡垃圾捡垃圾",
-				"ori_img_url": "4001001",
-				"price": 99,
-				"Probability": 0
-			}
-		];*/
-
 		this.buttons = [];
 		const container_1 = this.add.container(222, 140);
 		
@@ -237,6 +200,7 @@ export default class Game extends Phaser.Scene {
 			container_top.destroy();
 			this.backgroundImage.destroy();
 			this.scene.start('Trash');
+			this.shutdown();
 		});
 		container_top.add(closeButton);
 

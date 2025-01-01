@@ -12,6 +12,41 @@ export default class Game extends Phaser.Scene {
 		super("Game");
 		this.userId=2;
 		this.items = [];
+		this.isHanging = false;
+		this.mapid = null;
+
+		this.scrollSpeed = 20; // 滚动速度
+        this.offsetY = 0; // Y轴偏移量
+
+		this.itemsTmp = [
+            { name: '物品1', probability: '10%' },
+            { name: '物品2', probability: '30%' },
+            { name: '物品3', probability: '50%' },
+			{ name: '物品1', probability: '10%' },
+            /*{ name: '物品2', probability: '30%' },
+            { name: '物品3', probability: '50%' },
+			{ name: '物品1', probability: '10%' },
+            { name: '物品2', probability: '30%' },
+            { name: '物品3', probability: '50%' },
+			{ name: '物品1', probability: '10%' },
+            { name: '物品2', probability: '30%' },
+            { name: '物品3', probability: '50%' },
+			{ name: '物品1', probability: '10%' },
+            { name: '物品2', probability: '30%' },
+            { name: '物品3', probability: '50%' },
+			{ name: '物品1', probability: '10%' },
+            { name: '物品2', probability: '30%' },
+            { name: '物品3', probability: '50%' },
+			{ name: '物品1', probability: '10%' },
+            { name: '物品2', probability: '30%' },
+            { name: '物品3', probability: '50%' },
+			{ name: '物品1', probability: '10%' },
+            { name: '物品2', probability: '30%' },
+            { name: '物品3', probability: '50%' },*/
+            // 添加更多物品...
+        ];
+
+
 		/* START-USER-CTR-CODE */
 		// Write your code here.
 		/* END-USER-CTR-CODE */
@@ -21,6 +56,7 @@ export default class Game extends Phaser.Scene {
 	async updateItemDisplay(container_1) {
 		container_1.removeAll(true);
 
+		// 刷新左侧物品栏
 		const maxContains = 60;
 		for (let i = 0; i < maxContains; i++) {
 			let x = 44 + (i % 6) * 60;
@@ -55,6 +91,7 @@ export default class Game extends Phaser.Scene {
 				container_1.add(itemCountText);
 			}
 
+			// 右侧详情，只有时间是需要更新的
 
 			//container_1.add(border);
 			//this.buttons.push({ button, border });
@@ -80,7 +117,8 @@ export default class Game extends Phaser.Scene {
 		try {
 			const response = await fetch(`http://127.0.0.1:39998/api/v1/trash/check_bag?uid=${this.userId}`);
 			if (!response.ok) {
-				throw new Error('Network response was not ok');
+				//throw new Error('Network response was not ok');
+				return;
 			}
 			const apiItems = await response.json();
 	        console.log('API Response:', apiItems);
@@ -98,8 +136,13 @@ export default class Game extends Phaser.Scene {
 				price: item.price,
 				ori_img_url: item.ori_img_url // Ensure this is included
 			}));
+
+			// 停止挂机轮询
+			if (apiItems.is_hanging == false) {
+				this.shutdown();
+			}
 	
-			console.log('Item List:', this.items);
+			//console.log('Item List:', this.items);
 		} catch (error) {
 			console.error('There has been a problem with your fetch operation:', error);
 		}
@@ -142,11 +185,20 @@ export default class Game extends Phaser.Scene {
 		// Fetch item list and update display
 		//await this.getItemList(); // Wait for the item list to be fetched
 		//await this.updateItemDisplay(container_1); // Then update the display
-		// 开始周期性获取物品列表
-        this.startRefreshingItems(container_1);
+		// 开始周期性获取物品列表，放到出发按钮的逻辑中去
 
 		// 右边，地图内容展示
 		// 创建一个 Container
+
+		// 根据mapid获取整体地图信息，调用服务端接口
+		const response = await fetch(`http://127.0.0.1:39998/api/v1/map/info?mapid=${this.mapid}`);
+		if (!response.ok) {
+			//return;
+			throw new Error('Network response was not ok');
+		}
+		const mapInfo = await response.json();
+		console.log('API Response:', mapInfo);
+
 		const container = this.add.container(552, 90); // 中心位置
 
 		// 设置背景
@@ -157,27 +209,30 @@ export default class Game extends Phaser.Scene {
 		//background.setDisplaySize(200, 150); // 设置背景图片的显示大小
 		container.add(background);
 
-		// 添加标题
-		const title = this.add.text(280, 100, '主关卡名称', { fontSize: '36px', fill: '#ffffff' });
+		// 主关卡
+		const title = this.add.text(280, 100, mapInfo.info.mainLevel, { fontSize: '36px', fill: '#ffffff' });
 		title.setOrigin(0.5, 0.5);
 		container.add(title);
 
-		// 添加两个标签
-		const label1 = this.add.text(180, 238, '子关卡名称', { fontSize: '14px', fill: '#ffffff' });
-		const label2 = this.add.text(360, 238, '掉落概率', { fontSize: '14px', fill: '#ffffff' });
+		// 子关卡
+		const label1 = this.add.text(180, 150, mapInfo.info.subLevel, { fontSize: '14px', fill: '#ffffff' });
+		const label2 = this.add.text(360, 150, '掉落概率', { fontSize: '14px', fill: '#ffffff' });
 		container.add(label1);
 		container.add(label2);
 
-		const label3 = this.add.text(180, 268, '物品1', { fontSize: '14px', fill: '#ffffff' });
+		this.containerTmp = this.add.container(730, 308); // 创建容器
+        this.createLabels();
+		// 多个物品的掉落概率
+		/*const label3 = this.add.text(180, 268, '物品1', { fontSize: '14px', fill: '#ffffff' });
 		const label4 = this.add.text(360, 268, '10%', { fontSize: '14px', fill: '#ffffff' });
 		container.add(label3);
 		container.add(label4);
 
-
 		const label5 = this.add.text(180, 298, '物品2', { fontSize: '14px', fill: '#ffffff' });
 		const label6 = this.add.text(360, 298, '30%', { fontSize: '14px', fill: '#ffffff' });
 		container.add(label5);
-		container.add(label6);
+		container.add(label6);*/
+
 
 		const label7 = this.add.text(250, 328, '持续时间：10秒', { fontSize: '14px', fill: '#ffffff' });
 		container.add(label7);
@@ -192,13 +247,30 @@ export default class Game extends Phaser.Scene {
 		container.add(displayText);*/
 
 		// 添加按钮
-		const stopButton = this.add.image(300, 380, '停止按钮')
-			.setInteractive()
-			.on('pointerdown', () => {
-				console.log('按钮 1 被点击');
-			});
-		stopButton.scaleX = 0.4;
-		stopButton.scaleY = 0.4;
+
+		// 开始挂机按钮，停止
+		const startButton = this.add.image(200, 480, '24-出发按钮')
+		.setInteractive()
+		.on('pointerdown', () => {
+			console.log('按钮 出发 被点击');
+			this.btnStartHanging(container_1);
+		});
+
+		startButton.scaleX = 0.2;
+		startButton.scaleY = 0.2;
+		container.add(startButton);
+
+
+		const stopButton = this.add.image(360, 480, '停止按钮')
+		.setInteractive()
+		.on('pointerdown', () => {
+			console.log('按钮 停止 被点击');
+			this.btnStopHanging();
+		});
+
+
+		stopButton.scaleX = 0.2;
+		stopButton.scaleY = 0.2;
 		container.add(stopButton);
 
 		this.events.emit("scene-awake");
@@ -222,19 +294,39 @@ export default class Game extends Phaser.Scene {
 	// Write your code here
 
 	init(data) {
-        this.selectedButtonIndex = data.selectedButtonIndex; // map id
-		// 开始挂机
-		
+        this.selectedButtonIndex = data.selectedButtonIndex; // map id		
 
     }
+
+	btnStartHanging(container_1) {
+		// 调用后端接口开始挂机，先不判断
+		this.startHang();
+
+		// 页面开始刷新
+		this.startRefreshingItems(container_1);
+	}
+
+	btnStopHanging() {
+		// 停止刷新
+		this.shutdown();
+	}
+
 
 	selectWareHouseButton() {
 		// 启动仓库场景
         this.scene.launch('WareHouse');
 	}
 	
-	create() {
+	create(data) {
 
+
+		 // 监听滚轮事件
+		 this.input.on('wheel', this.handleScroll, this);
+
+
+		const mapid = data.mapid;
+        console.log('Received mapid:', mapid);
+		this.mapid = mapid;
 		this.editorCreate();
 		//this.cameras.main.setBackgroundColor('#3498db'); 
 		 // 添加背景图片
@@ -242,6 +334,43 @@ export default class Game extends Phaser.Scene {
 		 //this.cameras.main.setBounds(0, 0, this.game.config.width, this.game.config.height);
 		 // 添加背景图片
 	}
+
+	async startHang() {
+		this.userId = 2
+		try {
+			const response = await fetch(`http://127.0.0.1:39998/api/v1/trash/start_hanging?uid=${this.userId}&mapid=${this.mapid}&tools=1`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+			const result = await response.json();
+			console.log('API call successful:', result);
+		} catch (error) {
+			console.error('Error while calling API:', error);
+			throw error; // 抛出错误以便在 submitSelection 中处理
+		}
+	}
+
+	handleScroll(pointer, gameObjects, deltaX, deltaY) {
+        // 根据滚轮的方向调整偏移量
+        this.offsetY += deltaY > 0 ? -this.scrollSpeed : this.scrollSpeed;
+
+        // 限制偏移量范围
+        this.offsetY = Phaser.Math.Clamp(this.offsetY, -this.containerTmp.height, 0);
+
+        // 更新标签位置
+        this.createLabels();
+    }
+
+	createLabels() {
+        this.containerTmp.removeAll(true); // 清空容器中的内容
+
+        this.itemsTmp.forEach((item, index) => {
+            const label1 = this.add.text(0, index * 30 + this.offsetY, item.name, { fontSize: '14px', fill: '#ffffff' });
+            const label2 = this.add.text(180, index * 30 + this.offsetY, item.probability, { fontSize: '14px', fill: '#ffffff' });
+            this.containerTmp.add(label1);
+            this.containerTmp.add(label2);
+        });
+    }
 
 	/* END-USER-CODE */
 }

@@ -21,6 +21,9 @@ export default class Trash extends Phaser.Scene {
 	/** @returns {void} */
 	editorCreate() {
 
+		this.selectedButton = null; // 当前选中的按钮
+        this.defaultBorder = null; // 默认边框
+        this.selectedBorder = null; // 已选择的边框
 		this.buttons = []; // 存储按钮和边框
         this.submitButton = this.add.image(652, 646, '25-出发按钮不可按').setInteractive(); // 初始隐藏提交按钮
 		this.submitButton.scaleX = 0.35;
@@ -177,6 +180,7 @@ export default class Trash extends Phaser.Scene {
 	selectMapButton(selectedButton) {
         // 如果已有选中按钮，恢复其边框为默认
         if (this.selectedButton) {
+			console.log(this.buttons);
             const previousBorder = this.buttons.find(b => b.button === this.selectedButton).border;
             previousBorder.setTexture('09-目的地内框未选中'); // 恢复为默认边框
         }
@@ -197,29 +201,15 @@ export default class Trash extends Phaser.Scene {
             console.log('Selected button index:', selectedIndex); // 记录选中的按钮索引
 			const mapid = this.mapInfo[selectedIndex].id
 
-			// 开始挂机
-			this.startHang(mapid)
+			// 开始挂机，到子页面中去挂机
+			//this.startHang(mapid)
 
 
             // 跳转到下一个场景，并带上选中按钮的标记
-            this.scene.start('Game', { selectedButtonIndex: selectedIndex });
+            this.scene.start('Game', { mapid: mapid });
         }
     }
 
-	async startHang(mapid) {
-		this.userId = 2
-		try {
-			const response = await fetch(`http://127.0.0.1:39998/api/v1/trash/start_hanging?uid=${this.userId}&mapid=${mapid}&tools=1`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-			const result = await response.json();
-			console.log('API call successful:', result);
-		} catch (error) {
-			console.error('Error while calling API:', error);
-			throw error; // 抛出错误以便在 submitSelection 中处理
-		}
-	}
 
 
 	create() {

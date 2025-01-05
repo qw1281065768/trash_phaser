@@ -23,9 +23,6 @@ export default class Game extends Phaser.Scene {
             { name: '物品2', probability: '30%' },
             { name: '物品3', probability: '50%' },
 			{ name: '物品1', probability: '10%' },
-            /*{ name: '物品2', probability: '30%' },
-            { name: '物品3', probability: '50%' },
-			{ name: '物品1', probability: '10%' },
             { name: '物品2', probability: '30%' },
             { name: '物品3', probability: '50%' },
 			{ name: '物品1', probability: '10%' },
@@ -42,7 +39,10 @@ export default class Game extends Phaser.Scene {
             { name: '物品3', probability: '50%' },
 			{ name: '物品1', probability: '10%' },
             { name: '物品2', probability: '30%' },
-            { name: '物品3', probability: '50%' },*/
+            { name: '物品3', probability: '50%' },
+			{ name: '物品1', probability: '10%' },
+            { name: '物品2', probability: '30%' },
+            { name: '物品3', probability: '50%' },
             // 添加更多物品...
         ];
 
@@ -221,6 +221,12 @@ export default class Game extends Phaser.Scene {
 		container.add(label2);
 
 		this.containerTmp = this.add.container(730, 308); // 创建容器
+		// 添加黑色边框
+		const border = this.add.graphics();
+		border.lineStyle(2, 0x999999, 1); // 线宽、颜色（黑色）、透明度
+		border.strokeRect(0, 0, 200, 300); // 边框位置和尺寸
+		this.containerTmp.add(border);
+		
         this.createLabels();
 		// 多个物品的掉落概率
 		/*const label3 = this.add.text(180, 268, '物品1', { fontSize: '14px', fill: '#ffffff' });
@@ -320,9 +326,8 @@ export default class Game extends Phaser.Scene {
 	create(data) {
 
 
-		 // 监听滚轮事件
-		 this.input.on('wheel', this.handleScroll, this);
-
+		// 监听滚轮事件
+		this.input.on('wheel', this.handleScroll, this);
 
 		const mapid = data.mapid;
         console.log('Received mapid:', mapid);
@@ -351,8 +356,12 @@ export default class Game extends Phaser.Scene {
 	}
 
 	handleScroll(pointer, gameObjects, deltaX, deltaY) {
+		console.log('Scroll event triggered:', deltaY);
+		console.log('scrollSpeed:', this.scrollSpeed);
+
         // 根据滚轮的方向调整偏移量
         this.offsetY += deltaY > 0 ? -this.scrollSpeed : this.scrollSpeed;
+		//console.log('offsetY1:', this.containerTmp.height);
 
         // 限制偏移量范围
         this.offsetY = Phaser.Math.Clamp(this.offsetY, -this.containerTmp.height, 0);
@@ -370,6 +379,10 @@ export default class Game extends Phaser.Scene {
             this.containerTmp.add(label1);
             this.containerTmp.add(label2);
         });
+
+		const totalHeight = this.itemsTmp.length * 30; // 每个标签的高度
+		console.log('Container height:', totalHeight);
+		this.containerTmp.height = totalHeight; // 手动设置容器高度
     }
 
 	/* END-USER-CODE */

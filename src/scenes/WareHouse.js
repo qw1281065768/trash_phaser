@@ -17,7 +17,13 @@ export default class WareHouse extends Phaser.Scene {
         this.description = null;
         this.sellAmountInput = null;
         this.items = [];
+        this.coinsText = null;
         this.userId=2;
+        this.itemIndex = 0;
+        this.itemIndex = 0;
+
+        // 容器
+        this.itemContainer = null;
 
 	}
 
@@ -36,9 +42,8 @@ export default class WareHouse extends Phaser.Scene {
 		 backgroundImage.setDepth(-1);
         
 		// 物品栏
-        const itemContainer = this.add.container(200, 100);
-        this.createItemGrid(itemContainer);
-        
+        this.itemContainer = this.add.container(200, 100);
+        this.createItemGrid(this.itemContainer);
 
         // 物品详情
         const detailContainer = this.add.container(800, 100);
@@ -52,7 +57,7 @@ export default class WareHouse extends Phaser.Scene {
         // 顶部信息
         const goldBalance = 1000; // 初始金币余额
         const itemCount = this.items.length; // 物品总数
-        const coins = this.add.text(20, 20, `金币: ${goldBalance}`, { fontSize: '24px', fill: '#fff' });
+        this.coinsText = this.add.text(20, 20, `金币: ${0}`, { fontSize: '24px', fill: '#fff' });
         const itemSum = this.add.text(200, 20, `物品总数: ${itemCount}`, { fontSize: '24px', fill: '#fff' });
         
         const closeButton = this.add.text(this.cameras.main.width - 100, 20, '关闭', { fontSize: '24px', fill: '#ff0000' })
@@ -61,10 +66,10 @@ export default class WareHouse extends Phaser.Scene {
                 backgroundImage.destroy();
                 closeButton.destroy();
                 categoryIcons.forEach(icon => icon.destroy());
-                itemContainer.destroy();
+                this.itemContainer.destroy();
                 detailContainer.destroy();
 				itemSum.destroy();
-				coins.destroy();
+				//coins.destroy();
             });
 
         // 物品种类
@@ -75,11 +80,11 @@ export default class WareHouse extends Phaser.Scene {
                 .setInteractive()
                 .on('pointerdown', () => {
                     this.updateCategoryIcons(categoryIcons, index);
-                    this.updateItemDisplay(itemContainer, index); // 更新右侧物品显示
+                    this.updateItemDisplay(index); // 更新右侧物品显示
                 });
             categoryIcons.push(icon);
         });
-        this.updateItemDisplay(itemContainer, 0); // 0 对应“全部”
+        this.updateItemDisplay(0); // 0 对应“全部”
     }
 
     updateCategoryIcons(icons, selectedIndex) {
@@ -91,12 +96,12 @@ export default class WareHouse extends Phaser.Scene {
 
     async getItemList() {
         try {
+            console.log("getItemList");
             const response = await fetch(`http://127.0.0.1:39998/api/v1/item/user_items?type=1&uid=${this.userId}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const apiItems = await response.json(); // 从 API 获取的原始数据
-
             // 转换为所需的结构
             this.items = apiItems.map(item => ({
                 id: item.id, // ID
@@ -110,8 +115,21 @@ export default class WareHouse extends Phaser.Scene {
                 price: item.price // 价格
             }));
 
-            console.log('Item List:', this.items);
+            console.log(this.items);
         } catch (error) {
+            console.error('There has been a problem with your fetch operation:', error);
+        }
+    }
+
+    async getUserInfo() {
+        try {
+            const response = await fetch(`http://127.0.0.1:39998/api/v1/user/info?uid=${this.userId}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const info = await response.json(); // 从 API 获取的原始数据
+            this.coins = info.money;
+            } catch (error) {
             console.error('There has been a problem with your fetch operation:', error);
         }
     }
@@ -119,9 +137,10 @@ export default class WareHouse extends Phaser.Scene {
 		container.setSize(400, 600); // 设置容器大小
 	}
 
-	updateItemDetail(selectedSlot) {
-        const index = selectedSlot.getData('index'); // 获取选中槽的索引
-        const item = this.items[index]; // 根据索引获取物品信息
+	async updateItemDetail(itemId) {
+        // 根据 itemId 查找物品
+        console.log(itemId);
+        const item = this.items.find(i => i.id === itemId);
 		if (!item) {
 			console.error(`未找到索引为 ${index} 的物品`);
 			return; // 提前返回以避免错误
@@ -130,34 +149,70 @@ export default class WareHouse extends Phaser.Scene {
         this.title.setText(item.name); // 更新标题
         this.itemImage.setTexture(item.id); // 更新物品图片
 
+        // updateItemDetail
+        console.log("updateItemDetail !");
+        //console.log(item);
         this.description.setText(item.description); // 更新描述
-        this.sellAmountInput.setText(`售出数量: ${item.quantity}`); // 显示数量
+        this.sellAmountInput.setText(`数量: ${item.count}`); // 显示数量
+        this.itemPrice = item.price;
+        this.itemQuantity = item.count;
+        this.itemId = item.id;
 	}
 
     createItemDetail(container) {
 
         // 使用类属性定义 UI 组件
-        this.title = this.add.text(120, -20, '物品详情', { fontSize: '20px', fill: '#fff' }).setOrigin(0.5);
+        this.title = this.add.text(80, -30, '物品详情', { fontSize: '20px', fill: '#fff' }).setOrigin(0,0);
         this.itemImage = this.add.image(120, 90, 'placeholderImage').setOrigin(0.5);
         this.itemImage.scaleX = 0.25;
         this.itemImage.scaleY = 0.25;
-        this.description = this.add.text(120, 200, '物品描述...', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
-        this.sellAmountInput = this.add.text(120, 240, '售出数量: 0', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
-        const sellButton = this.add.text(360, 500, '出售', { fontSize: '24px', fill: '#0f0' })
+        this.description = this.add.text(80, 200, '物品描述...', { fontSize: '16px', fill: '#fff' }).setOrigin(0);
+        this.sellAmountInput = this.add.text(80, 240, '数量: 0', { fontSize: '16px', fill: '#fff' }).setOrigin(0);
+        const sellButton = this.add.image(360, 515, '出售')
             .setInteractive()
             .on('pointerdown', () => {
                 // 处理出售逻辑
                 console.log('出售逻辑处理');
+                this.sellItem();
             });
+        sellButton.scaleX = 0.35;
+        sellButton.scaleY = 0.35;
+
+        // 创建显示可售价格的文本
+        this.priceText = this.add.text(380, 460, '0', { fontSize: '24px', fill: '#fff' });
+
+        // 创建输入框
+        this.inputElement = document.createElement('input');
+        this.inputElement.type = 'number';
+        this.inputElement.style.position = 'absolute';
+        this.inputElement.style.width = '70px';
+        this.inputElement.style.fontSize = '20px';
+        this.inputElement.style.zIndex = '1000';
+        document.body.appendChild(this.inputElement);
+
+        // 更新可售价格
+        this.inputElement.addEventListener('input', () => {
+            const quantity = parseInt(this.inputElement.value) || 0;
+            console.log(quantity,this.itemPrice);
+            if (quantity <= this.itemQuantity) {
+                const totalPrice = quantity * this.itemPrice;
+                this.priceText.setText(`${totalPrice}`);
+            } else {
+                this.priceText.setText('0');
+            }
+        });
+
+        this.updateInputPosition();
         
-        container.add([this.title, this.itemImage, this.description, this.sellAmountInput, sellButton]);
+        container.add([this.title, this.itemImage, this.description, this.sellAmountInput, this.priceText, sellButton]);
     }
 
-    async updateItemDisplay(itemContainer, selectedTypeIndex) {
+    // 更新左边仓库详情
+    async updateItemDisplay(selectedTypeIndex) {
         const selectedType = [0, 1, 2, 3, 4, 5][selectedTypeIndex];
         let filteredItems;
         await this.getItemList();
-
+        await this.getUserInfo();
         if (selectedType === 0) {
             // 如果选择的是“全部”，则显示所有物品
             filteredItems = this.items;
@@ -167,7 +222,7 @@ export default class WareHouse extends Phaser.Scene {
         }
 
         // 清空现有的物品槽
-        itemContainer.removeAll(true); // 假设 itemContainer 是物品槽的容器
+        this.itemContainer.removeAll(true); // 假设 itemContainer 是物品槽的容器
 
         filteredItems.forEach((item, index) => {
             const x = (index % 7) * 90; // 计算 x 坐标
@@ -190,15 +245,16 @@ export default class WareHouse extends Phaser.Scene {
             const itemCountText = this.add.text(x, y + 40, `${item.count}`, { fontSize: '16px', fill: '#fff' })
             .setOrigin(0.5);
 
-            itemBackground.setData('index', index); // 存储索引数据
+            //itemBackground.setData('index', index); // 存储索引数据
             itemBackground.on('pointerdown', () => {
-                this.updateItemDetail(itemBackground);
+                this.itemIndex = itemBackground;
+                this.updateItemDetail(item.id);
             });
 
 
-            itemContainer.add(itemBackground);
-            itemContainer.add(itemSlot); // 将物品槽添加到容器中
-            itemContainer.add(itemCountText);
+            this.itemContainer.add(itemBackground);
+            this.itemContainer.add(itemSlot); // 将物品槽添加到容器中
+            this.itemContainer.add(itemCountText);
         });
 
         // 如果没有物品可显示，可以更新物品详情区域以显示消息
@@ -207,8 +263,68 @@ export default class WareHouse extends Phaser.Scene {
             //this.itemImage.setTexture('defaultImage'); // 使用默认图像
             this.itemImage.setVisible(false);
             this.description.setText('没有此类型的物品。');
-            this.sellAmountInput.setText('售出数量: 0');
+            this.sellAmountInput.setText('数量: 0');
         }
+
+        // 更新总金币
+        this.coinsText.setText(`金币: ${this.coins}`);
+
+    }
+
+
+    openInput() {
+        this.inputElement.style.display = 'block';
+        this.inputElement.focus();
+    }
+
+    async sellItem() {
+        const quantity = parseInt(this.inputElement.value) || 0;
+
+        if (quantity > this.itemQuantity) {
+            alert('数量超过可售数量！');
+            return;
+        }
+
+        // 调用后端接口售卖，传入 itemId 和数量
+        const success = await this.sellToBackend(quantity); // 传入 itemId 和数量
+
+        /*if (success) {
+            alert('售卖成功！');
+        } else {
+            alert('售卖失败！');
+        }*/
+
+        // 清空输入框和价格
+        this.inputElement.value = '';
+        this.priceText.setText('0');
+        //this.inputElement.style.display = 'none'; // 隐藏输入框
+        console.log("update page!");
+
+        // 更新页面
+        await this.updateItemDisplay(0);
+        this.updateItemDetail(this.itemId);
+    }
+
+
+    async sellToBackend(quantity) {
+
+        //console.log(this.itemId, quantity);
+        //return;
+        const response = await fetch(`http://127.0.0.1:39998/api/v1/item/sell?uid=${this.userId}&item_id=${this.itemId}&count=${quantity}`);
+        if (!response.ok) {
+            //throw new Error('Network response was not ok');
+        }
+        //const result = await response.json();
+        //console.log('API call successful:', result);
+        return;
+    }
+
+
+    // 方法用于根据其他元素的位置更新输入框位置
+    updateInputPosition() {
+        // 获取容器的世界坐标
+        this.inputElement.style.left = `75%`; // 从左侧占据 10% 的宽度
+        this.inputElement.style.top = `70%`; // 从顶部占据 50% 的高度
     }
 
 	create() {

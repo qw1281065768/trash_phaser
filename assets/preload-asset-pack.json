@@ -12,6 +12,11 @@
                 "key": "详情面板"
             },
             {
+                "url": "assets/page1/出售.png",
+                "type": "image",
+                "key": "出售"
+            },
+            {
                 "url": "assets/page1/大框.png",
                 "type": "image",
                 "key": "大框"

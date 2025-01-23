@@ -6,6 +6,8 @@
 /* START-USER-IMPORTS */
 /* END-USER-IMPORTS */
 
+import { IP_ADDRESS } from '../const.js';
+
 export default class Game extends Phaser.Scene {
 
 	constructor() {
@@ -115,7 +117,7 @@ export default class Game extends Phaser.Scene {
 
 	async getItemList() {
 		try {
-			const response = await fetch(`http://127.0.0.1:39998/api/v1/trash/check_bag?uid=${this.userId}`);
+			const response = await fetch(`${IP_ADDRESS}/api/v1/trash/check_bag?uid=${this.userId}`);
 			if (!response.ok) {
 				//throw new Error('Network response was not ok');
 				return;
@@ -191,7 +193,7 @@ export default class Game extends Phaser.Scene {
 		// 创建一个 Container
 
 		// 根据mapid获取整体地图信息，调用服务端接口
-		const response = await fetch(`http://127.0.0.1:39998/api/v1/map/info?mapid=${this.mapid}`);
+		const response = await fetch(`${IP_ADDRESS}/api/v1/map/info?mapid=${this.mapid}`);
 		if (!response.ok) {
 			//return;
 			throw new Error('Network response was not ok');
@@ -343,7 +345,7 @@ export default class Game extends Phaser.Scene {
 	async startHang() {
 		this.userId = 2
 		try {
-			const response = await fetch(`http://127.0.0.1:39998/api/v1/trash/start_hanging?uid=${this.userId}&mapid=${this.mapid}&tools=1`);
+			const response = await fetch(`${IP_ADDRESS}/api/v1/trash/start_hanging?uid=${this.userId}&mapid=${this.mapid}&tools=1`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

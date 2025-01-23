@@ -5,6 +5,7 @@
 
 /* START-USER-IMPORTS */
 /* END-USER-IMPORTS */
+import { IP_ADDRESS } from '../const.js';
 
 export default class WareHouse extends Phaser.Scene {
 
@@ -97,7 +98,7 @@ export default class WareHouse extends Phaser.Scene {
     async getItemList() {
         try {
             console.log("getItemList");
-            const response = await fetch(`http://127.0.0.1:39998/api/v1/item/user_items?type=1&uid=${this.userId}`);
+            const response = await fetch(`${IP_ADDRESS}/api/v1/item/user_items?type=1&uid=${this.userId}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -123,7 +124,7 @@ export default class WareHouse extends Phaser.Scene {
 
     async getUserInfo() {
         try {
-            const response = await fetch(`http://127.0.0.1:39998/api/v1/user/info?uid=${this.userId}`);
+            const response = await fetch(`${IP_ADDRESS}/api/v1/user/info?uid=${this.userId}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -310,7 +311,7 @@ export default class WareHouse extends Phaser.Scene {
 
         //console.log(this.itemId, quantity);
         //return;
-        const response = await fetch(`http://127.0.0.1:39998/api/v1/item/sell?uid=${this.userId}&item_id=${this.itemId}&count=${quantity}`);
+        const response = await fetch(`${IP_ADDRESS}/api/v1/item/sell?uid=${this.userId}&item_id=${this.itemId}&count=${quantity}`);
         if (!response.ok) {
             //throw new Error('Network response was not ok');
         }

@@ -43,11 +43,11 @@ export default class Trash extends Phaser.Scene {
 		// map选择，读取用户等级，获取是否能解锁，能否解锁直接写在前端代码里，不要后端接口了
 		this.mapInfo = [
 			{ name: "BM1-1",id: 1001, isLock: false },
-			{ name: "BM1-2",id: 1002, isLock: false },
-			{ name: "BM1-3",id: 1003, isLock: false },
-			{ name: "BM1-4",id: 1004, isLock: false },
+			{ name: "BM1-2",id: 1002, isLock: true },
+			{ name: "BM1-3",id: 1003, isLock: true },
+			{ name: "BM1-4",id: 1004, isLock: true },
 			{ name: "BM1-5",id: 1005, isLock: true },
-			{ name: "BM1-6",id: 1006, isLock: false }
+			{ name: "BM1-6",id: 1006, isLock: true }
 		];
 
 		const container_1 = this.add.container(172, 170);

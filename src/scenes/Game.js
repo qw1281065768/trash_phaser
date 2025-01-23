@@ -24,7 +24,7 @@ export default class Game extends Phaser.Scene {
             { name: '物品1', probability: '10%' },
             { name: '物品2', probability: '30%' },
             { name: '物品3', probability: '50%' },
-			{ name: '物品1', probability: '10%' },
+			/*{ name: '物品1', probability: '10%' },
             { name: '物品2', probability: '30%' },
             { name: '物品3', probability: '50%' },
 			{ name: '物品1', probability: '10%' },
@@ -44,7 +44,7 @@ export default class Game extends Phaser.Scene {
             { name: '物品3', probability: '50%' },
 			{ name: '物品1', probability: '10%' },
             { name: '物品2', probability: '30%' },
-            { name: '物品3', probability: '50%' },
+            { name: '物品3', probability: '50%' },*/
             // 添加更多物品...
         ];
 

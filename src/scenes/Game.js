@@ -48,6 +48,9 @@ export default class Game extends Phaser.Scene {
             // 添加更多物品...
         ];
 
+		this.startButton = null;
+		this.stopButton = null;
+
 
 		/* START-USER-CTR-CODE */
 		// Write your code here.
@@ -125,6 +128,7 @@ export default class Game extends Phaser.Scene {
 			const apiItems = await response.json();
 	        console.log('API Response:', apiItems);
 
+			this.isHanging = apiItems.is_hanging
 			// Convert to the required structure
 			this.items = apiItems.bag_detail.map(item => ({
 				id: item.id,
@@ -143,6 +147,8 @@ export default class Game extends Phaser.Scene {
 			if (apiItems.is_hanging == false) {
 				this.shutdown();
 			}
+
+			this.updateButtonState();
 	
 			//console.log('Item List:', this.items);
 		} catch (error) {
@@ -257,29 +263,44 @@ export default class Game extends Phaser.Scene {
 		// 添加按钮
 
 		// 开始挂机按钮，停止
-		const startButton = this.add.image(200, 480, '24-出发按钮')
+		this.startButton = this.add.image(200, 480, '24-出发按钮')
 		.setInteractive()
 		.on('pointerdown', () => {
-			console.log('按钮 出发 被点击');
-			this.btnStartHanging(container_1);
+			if (!this.isHanging) {
+				console.log('按钮 出发 被点击');
+				this.btnStartHanging(container_1);
+				this.startButton.setScale(0.18); // 按压效果
+			}
+		})
+		.on('pointerup', () => {
+			this.startButton.setScale(0.2); // 恢复原始大小
 		});
 
-		startButton.scaleX = 0.2;
-		startButton.scaleY = 0.2;
-		container.add(startButton);
+		this.startButton.scaleX = 0.2;
+		this.startButton.scaleY = 0.2;
+		container.add(this.startButton);
 
 
-		const stopButton = this.add.image(360, 480, '停止按钮')
+		// 创建停止按钮
+		this.stopButton = this.add.image(360, 480, '停止按钮')
 		.setInteractive()
 		.on('pointerdown', () => {
-			console.log('按钮 停止 被点击');
-			this.btnStopHanging();
+			if (this.isHanging) {
+				console.log('按钮 停止 被点击');
+				this.btnStopHanging();
+				this.stopButton.setScale(0.18); // 按压效果
+			}
+		})
+		.on('pointerup', () => {
+			this.stopButton.setScale(0.2); // 恢复原始大小
 		});
 
+		this.stopButton.scaleX = 0.2;
+		this.stopButton.scaleY = 0.2;
+		container.add(this.stopButton);
 
-		stopButton.scaleX = 0.2;
-		stopButton.scaleY = 0.2;
-		container.add(stopButton);
+
+		this.updateButtonState();
 
 		this.events.emit("scene-awake");
 
@@ -319,6 +340,19 @@ export default class Game extends Phaser.Scene {
 		this.shutdown();
 	}
 
+	updateButtonState() {
+		if (this.isHanging) {
+			this.startButton.setAlpha(0.5); // 置灰
+			this.startButton.disableInteractive(); // 禁用点击
+			this.stopButton.setAlpha(1); // 正常
+			this.stopButton.setInteractive(); // 启用点击
+		} else {
+			this.startButton.setAlpha(1); // 正常
+			this.startButton.setInteractive(); // 启用点击
+			this.stopButton.setAlpha(0.5); // 置灰
+			this.stopButton.disableInteractive(); // 禁用点击
+		}
+	}
 
 	selectWareHouseButton() {
 		// 启动仓库场景

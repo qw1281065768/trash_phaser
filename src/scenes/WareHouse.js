@@ -70,7 +70,10 @@ export default class WareHouse extends Phaser.Scene {
                 this.itemContainer.destroy();
                 detailContainer.destroy();
 				itemSum.destroy();
-				//coins.destroy();
+				this.coinsText.destroy();
+                //this.inputElement.destroy();
+                document.body.removeChild(this.inputElement); // 从 DOM 中移除输入框
+                this.inputElement = null; // 清除引用
             });
 
         // 物品种类
@@ -203,9 +206,10 @@ export default class WareHouse extends Phaser.Scene {
             }
         });
 
-        this.updateInputPosition();
         
         container.add([this.title, this.itemImage, this.description, this.sellAmountInput, this.priceText, sellButton]);
+
+        this.updateInputPosition(sellButton.getBounds().x, sellButton.getBounds().y);
     }
 
     // 更新左边仓库详情
@@ -322,10 +326,11 @@ export default class WareHouse extends Phaser.Scene {
 
 
     // 方法用于根据其他元素的位置更新输入框位置
-    updateInputPosition() {
+    updateInputPosition(x,y) {
+        console.log(x,y);
         // 获取容器的世界坐标
-        this.inputElement.style.left = `75%`; // 从左侧占据 10% 的宽度
-        this.inputElement.style.top = `70%`; // 从顶部占据 50% 的高度
+        this.inputElement.style.left = x ; // 从左侧占据 10% 的宽度
+        this.inputElement.style.top = y; // 从顶部占据 50% 的高度
     }
 
 	create() {

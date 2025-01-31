@@ -14,6 +14,9 @@ window.addEventListener('load', function () {
 		scale: {
 			mode: Phaser.Scale.FIT,
 			autoCenter: Phaser.Scale.CENTER_BOTH
+		},
+		dom: {
+			createContainer: true // 确保创建 DOM 容器
 		}
 	});
 
